@@ -45,6 +45,6 @@ for comment in reddit.inbox.stream():
         try:
             comment.reply(response)
         except praw.exceptions.RedditAPIException as error:
-            time.sleep(min(int(re.search(r'\b(d+)\b', error)) * 60, 600)) # maximum of 10 minutes
+            time.sleep(min(int(re.search(r'\b(d+)\b', str(error))) * 60, 600)) # maximum of 10 minutes
             comment.reply(response)
     comment.mark_read()
