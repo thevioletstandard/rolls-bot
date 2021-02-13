@@ -11,6 +11,7 @@ def roll_die(roll, modifier=""):
             raise Exception("Too many rolls")
         rolls = [secrets.randbelow(maximum) + 1 for _ in range(count)]
         total = sum(rolls)
+
         if modifier:
             if modifier[0] == "+":
                 total += int(modifier[1:])
@@ -39,12 +40,13 @@ for comment in reddit.inbox.stream():
         dice, response = re.findall(r'\b(\d+d\d+)([+\-*/%]\d+)?\b', comment.body), "" # roll and optional modifier
         for die in dice:
             response += roll_die(die[0], die[1])
-        if len(response) > 8192:
+        if len(response) > 9905:
             response = "Error: Too many rolls at once.\n\n"
-        response += "---\n\nI'm a bot that can roll dice if you mention me! Check out r/RollsBot if you need any help."
-        try:
-            comment.reply(response)
-        except praw.exceptions.RedditAPIException as error:
-            time.sleep(min(int(re.search(r'\b(\d+)\b', str(error))[0]) * 60, 600)) # maximum of 10 minutes
-            comment.reply(response)
+        if response:
+            response += "---\n\nI'm a bot that can roll dice if you mention me! Check out r/RollsBot if you need any help."
+            try:
+                comment.reply(response)
+            except praw.exceptions.RedditAPIException as error:
+                time.sleep(min(int(re.search(r'\b(\d+)\b', str(error))[0]) * 60, 600)) # maximum of 10 minutes
+                comment.reply(response)
     comment.mark_read()
