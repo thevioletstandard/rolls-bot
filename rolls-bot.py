@@ -37,7 +37,7 @@ logging.basicConfig(filename='application.log', format='%(asctime)s %(levelname)
 reddit = praw.Reddit("rolls-bot") # settings loaded from praw.ini
 for comment in reddit.inbox.stream():
     if isinstance(comment, praw.models.Comment):
-        dice, response = re.findall(r'\b(\d+d\d+)([+\-*/%]\d+)?\b', comment.body), "" # roll and optional modifier
+        dice, response = re.findall(r'(\d+d\d+)([+\-*/%]\d+)?', comment.body), "" # roll and optional modifier
         for die in dice:
             response += roll_die(die[0], die[1])
         if len(response) > 9905:
